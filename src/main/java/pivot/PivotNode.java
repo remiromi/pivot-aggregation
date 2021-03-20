@@ -72,8 +72,8 @@ public class PivotNode<LabelType, ValueType extends Number> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PivotNode<LabelType, ValueType> pivotNode = (PivotNode<LabelType, ValueType>) o;
-        return label.equals(pivotNode.getLabel());
+        PivotNode<?, ?> pivotNode = (PivotNode<?, ?>) o;
+        return label.equals(pivotNode.label);
     }
 
     @Override

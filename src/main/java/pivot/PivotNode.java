@@ -11,16 +11,17 @@ public class PivotNode<LabelType> {
 
     private LabelType label;
     private int value;
-    private final Set<PivotNode<LabelType>> children;
+    private final Set<PivotNode<LabelType>> children = new HashSet<>();
 
+    public PivotNode(){}
 
     public PivotNode(LabelType label){
         this.label = label;
-        this.children = new HashSet<>();
     }
 
-    public PivotNode() {
-        this.children = new HashSet<>();
+    public PivotNode(LabelType label, int value) {
+        this.label = label;
+        this.value = value;
     }
 
     public void addChild(PivotNode<LabelType> newChild){

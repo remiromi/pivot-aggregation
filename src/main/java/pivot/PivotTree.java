@@ -4,6 +4,7 @@ import exception.LabelNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,22 +12,35 @@ public class PivotTree<LabelType>{
 
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final PivotNode<LabelType> root;
+    private final Function<List<Integer>, Integer> aggregationFunction;
 
-    public PivotTree() {
-        logger.log(Level.INFO, "Building Tree");
-        root = new PivotNode<>();
+    public PivotTree(Function<List<Integer>, Integer> aggregationFunction) {
+        this.root = new PivotNode<>();
+        this.aggregationFunction = aggregationFunction;
     }
 
     public void addRow(List<LabelType> labels, int value){
         PivotNode<LabelType> previousNode = this.root;
 
-        for(LabelType label : labels){
-            PivotNode<LabelType> newChild = new PivotNode<>(label);
+        for(int index = 0; index < labels.size()-1; index++){
+            LabelType currentLabel = labels.get(index);
+            PivotNode<LabelType> newChild = new PivotNode<>(currentLabel);
             previousNode.addChild(newChild);
-            previousNode = previousNode.getChildFromLabel(label);
+            previousNode = previousNode.getChildFromLabel(currentLabel);
         }
-        //TODO change SUM to general AGGREGATION FUNC
-        previousNode.setValue(previousNode.getValue() + value);
+        // TODO multiple values in single row?
+        addLeafNode(labels, value, previousNode);
+    }
+
+    private void addLeafNode(List<LabelType> labels, int value, PivotNode<LabelType> parentNode) {
+        LabelType leafLabel = labels.get(labels.size()-1);
+        PivotNode<LabelType> leafChild = parentNode.getChildFromLabel(leafLabel);
+        if(leafChild != null) {
+            leafChild.setValue(aggregationFunction.apply(List.of(leafChild.getValue(), value)));
+        }
+        else {
+            parentNode.addChild(new PivotNode<>(leafLabel, value));
+        }
     }
 
     public void fillTreeValues(){
@@ -46,7 +60,7 @@ public class PivotTree<LabelType>{
         }
 
         logger.log(Level.FINEST,"Visiting " + node.getLabel());
-        int currentNodeValue = aggregation(subTreeValues);
+        int currentNodeValue = aggregationFunction.apply(subTreeValues);
         node.setValue(currentNodeValue);
         return currentNodeValue;
     }
@@ -66,10 +80,6 @@ public class PivotTree<LabelType>{
             currentNode = child;
         }
         return currentNode.getValue();
-    }
-
-    private int aggregation(List<Integer> values) {
-        return values.stream().reduce(0, Integer::sum);
     }
 
     public int getTotal(){

@@ -24,7 +24,7 @@ class PivotTreeBuilderTest {
     }
 
     private String getExpectedTreeAsString() {
-        return "{\"root\":{\"label\":\"Root\", \"value\":15, \"children\":[{\"label\":\"Node A\", \"value\":12, \"children\":[{\"label\":\"Node B\", \"value\":12, \"children\":[{\"label\":\"Node X\", \"value\":9, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":3, \"children\":[{\"label\":\"Node J\", \"value\":3, \"children\":[{\"label\":\"Node C\", \"value\":3, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
+        return "{\"root\":{\"label\":\"null\", \"value\":15, \"children\":[{\"label\":\"Node A\", \"value\":12, \"children\":[{\"label\":\"Node B\", \"value\":12, \"children\":[{\"label\":\"Node X\", \"value\":9, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":3, \"children\":[{\"label\":\"Node J\", \"value\":3, \"children\":[{\"label\":\"Node C\", \"value\":3, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
     }
 
     private List<PivotRow<String>> getRows() {

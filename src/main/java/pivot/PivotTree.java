@@ -14,7 +14,7 @@ public class PivotTree<LabelType>{
 
     public PivotTree() {
         logger.log(Level.INFO, "Building Tree");
-        root = new PivotNode<>((LabelType) "Root");
+        root = new PivotNode<>();
     }
 
     public void addRow(List<LabelType> labels, int value){

@@ -23,7 +23,7 @@ class PivotTreeTest {
 
         tree.addRow(startingRow, 1);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"Root\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
@@ -34,7 +34,7 @@ class PivotTreeTest {
         tree.addRow(startingRow, 1);
         tree.addRow(newBranchRow, 2);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"Root\", \"value\":0, \"children\":[{\"label\":\"Node A\", \"value\":0, \"children\":[{\"label\":\"Node B\", \"value\":0, \"children\":[{\"label\":\"Node G\", \"value\":0, \"children\":[{\"label\":\"Node H\", \"value\":2, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node A\", \"value\":0, \"children\":[{\"label\":\"Node B\", \"value\":0, \"children\":[{\"label\":\"Node G\", \"value\":0, \"children\":[{\"label\":\"Node H\", \"value\":2, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
@@ -45,7 +45,7 @@ class PivotTreeTest {
         tree.addRow(startingRow, 1);
         tree.addRow(commonBranchRow, 399);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"Root\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":399, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":399, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
@@ -56,7 +56,7 @@ class PivotTreeTest {
         tree.addRow(startingRow, 1);
         tree.addRow(startingRow, 999);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"Root\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
@@ -69,7 +69,7 @@ class PivotTreeTest {
 
         tree.fillTreeValues();
 
-        String expectedTreeString = "{\"root\":{\"label\":\"Root\", \"value\":50, \"children\":[{\"label\":\"Node A\", \"value\":21, \"children\":[{\"label\":\"Node B\", \"value\":21, \"children\":[{\"label\":\"Node G\", \"value\":21, \"children\":[{\"label\":\"Node H\", \"value\":21, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":29, \"children\":[{\"label\":\"Node J\", \"value\":29, \"children\":[{\"label\":\"Node C\", \"value\":29, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":28, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":50, \"children\":[{\"label\":\"Node A\", \"value\":21, \"children\":[{\"label\":\"Node B\", \"value\":21, \"children\":[{\"label\":\"Node G\", \"value\":21, \"children\":[{\"label\":\"Node H\", \"value\":21, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":29, \"children\":[{\"label\":\"Node J\", \"value\":29, \"children\":[{\"label\":\"Node C\", \"value\":29, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":28, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 

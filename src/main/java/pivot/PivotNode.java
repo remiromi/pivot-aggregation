@@ -9,13 +9,17 @@ import java.util.logging.Logger;
 public class PivotNode<LabelType> {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    private final LabelType label;
+    private LabelType label;
     private int value;
     private final Set<PivotNode<LabelType>> children;
 
 
     public PivotNode(LabelType label){
         this.label = label;
+        this.children = new HashSet<>();
+    }
+
+    public PivotNode() {
         this.children = new HashSet<>();
     }
 

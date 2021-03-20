@@ -8,23 +8,23 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PivotTree<LabelType>{
+public class PivotTree<LabelType, ValueType extends Number>{
 
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    private final PivotNode<LabelType> root;
-    private final Function<List<Integer>, Integer> aggregationFunction;
+    private final PivotNode<LabelType, ValueType> root;
+    private final Function<List<ValueType>, ValueType> aggregationFunction;
 
-    public PivotTree(Function<List<Integer>, Integer> aggregationFunction) {
+    public PivotTree(Function<List<ValueType>, ValueType> aggregationFunction) {
         this.root = new PivotNode<>();
         this.aggregationFunction = aggregationFunction;
     }
 
-    public void addRow(List<LabelType> labels, int value){
-        PivotNode<LabelType> previousNode = this.root;
+    public void addRow(List<LabelType> labels, ValueType value){
+        PivotNode<LabelType, ValueType> previousNode = this.root;
 
         for(int index = 0; index < labels.size()-1; index++){
             LabelType currentLabel = labels.get(index);
-            PivotNode<LabelType> newChild = new PivotNode<>(currentLabel);
+            PivotNode<LabelType, ValueType> newChild = new PivotNode<>(currentLabel);
             previousNode.addChild(newChild);
             previousNode = previousNode.getChildFromLabel(currentLabel);
         }
@@ -32,9 +32,9 @@ public class PivotTree<LabelType>{
         addLeafNode(labels, value, previousNode);
     }
 
-    private void addLeafNode(List<LabelType> labels, int value, PivotNode<LabelType> parentNode) {
+    private void addLeafNode(List<LabelType> labels, ValueType value, PivotNode<LabelType, ValueType> parentNode) {
         LabelType leafLabel = labels.get(labels.size()-1);
-        PivotNode<LabelType> leafChild = parentNode.getChildFromLabel(leafLabel);
+        PivotNode<LabelType, ValueType> leafChild = parentNode.getChildFromLabel(leafLabel);
         if(leafChild != null) {
             leafChild.setValue(aggregationFunction.apply(List.of(leafChild.getValue(), value)));
         }
@@ -47,11 +47,11 @@ public class PivotTree<LabelType>{
         fillTreeValues(root);
     }
 
-    private int fillTreeValues(PivotNode<LabelType> node){
+    private ValueType fillTreeValues(PivotNode<LabelType, ValueType> node){
 
-        List<Integer> subTreeValues = new ArrayList<>();
+        List<ValueType> subTreeValues = new ArrayList<>();
 
-        for(PivotNode<LabelType> child : node.getChildren()){
+        for(PivotNode<LabelType, ValueType> child : node.getChildren()){
             if(child.isLeaf()) {
                 subTreeValues.add(child.getValue());
             } else {
@@ -60,20 +60,20 @@ public class PivotTree<LabelType>{
         }
 
         logger.log(Level.FINEST,"Visiting " + node.getLabel());
-        int currentNodeValue = aggregationFunction.apply(subTreeValues);
+        ValueType currentNodeValue = aggregationFunction.apply(subTreeValues);
         node.setValue(currentNodeValue);
         return currentNodeValue;
     }
 
-    public int findValue(List<LabelType> labels) throws LabelNotFoundException {
+    public ValueType findValue(List<LabelType> labels) throws LabelNotFoundException {
         if(labels == null || labels.isEmpty()) {
             throw new LabelNotFoundException("Labels is null or empty.");
         }
 
-        PivotNode<LabelType> currentNode = root;
+        PivotNode<LabelType, ValueType> currentNode = root;
 
         for(LabelType label : labels){
-            PivotNode<LabelType> child = currentNode.getChildFromLabel(label);
+            PivotNode<LabelType, ValueType> child = currentNode.getChildFromLabel(label);
             if(child == null){
                 throw new LabelNotFoundException("Label with name:'" + label + "' not found.");
             }
@@ -82,7 +82,7 @@ public class PivotTree<LabelType>{
         return currentNode.getValue();
     }
 
-    public int getTotal(){
+    public ValueType getTotal(){
         // TODO use this in case query row is empty -> Add also in README.md
         return root.getValue();
     }

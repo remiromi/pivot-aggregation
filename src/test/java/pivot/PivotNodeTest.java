@@ -7,18 +7,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class PivotNodeTest {
 
-    private final PivotNode<String> aChildNode = new PivotNode<>("Node C");
+    private final PivotNode<String, Integer> aChildNode = new PivotNode<>("Node C");
 
     @Test
     void testIsLeaf() {
-        PivotNode<String> aLeafNode = new PivotNode<>("Node L");
+        PivotNode<String, Integer> aLeafNode = new PivotNode<>("Node L");
 
         assertThat(aLeafNode.isLeaf()).isTrue();
     }
 
     @Test
     void testIsNotLeaf() {
-        PivotNode<String> aNode = initializeFatherNode();
+        PivotNode<String, Integer> aNode = initializeFatherNode();
 
         assertThat(aNode.isLeaf()).isFalse();
     }
@@ -26,11 +26,11 @@ class PivotNodeTest {
     @Test
     void testGetChildFromLabelFound() {
 
-        PivotNode<String> aNode = initializeFatherNode();
+        PivotNode<String, Integer> aNode = initializeFatherNode();
         String childLabel = "Node C";
-        PivotNode<String> expectedChildNode = new PivotNode<>("Node C");
+        PivotNode<String, Integer> expectedChildNode = new PivotNode<>("Node C");
 
-        PivotNode<String> childFromLabel = aNode.getChildFromLabel(childLabel);
+        PivotNode<String, Integer> childFromLabel = aNode.getChildFromLabel(childLabel);
 
         assertThat(childFromLabel).isEqualTo(expectedChildNode);
     }
@@ -38,16 +38,16 @@ class PivotNodeTest {
     @Test
     void testGetChildFromLabelNotFound() {
 
-        PivotNode<String> aNode = initializeFatherNode();
+        PivotNode<String, Integer> aNode = initializeFatherNode();
         String anotherLabel = "Node L";
 
-        PivotNode<String> childFromLabel = aNode.getChildFromLabel(anotherLabel);
+        PivotNode<String, Integer> childFromLabel = aNode.getChildFromLabel(anotherLabel);
 
         assertThat(childFromLabel).isNull();
     }
 
-    private PivotNode<String> initializeFatherNode() {
-        PivotNode<String> aNode = new PivotNode<>("Node A");
+    private PivotNode<String, Integer> initializeFatherNode() {
+        PivotNode<String, Integer> aNode = new PivotNode<>("Node A");
         aNode.addChild(aChildNode);
         return aNode;
     }

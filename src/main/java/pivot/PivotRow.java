@@ -2,20 +2,20 @@ package pivot;
 
 import java.util.List;
 
-public class PivotRow<T> {
-    public List<T> labels;
-    public final int value;
+public class PivotRow<LabelType, ValueType extends Number> {
+    public List<LabelType> labels;
+    public final ValueType value;
 
-    public PivotRow(List<T> labels, int value) {
+    public PivotRow(List<LabelType> labels, ValueType value) {
         this.labels = labels;
         this.value = value;
     }
 
-    public List<T> getLabels(){
+    public List<LabelType> getLabels(){
         return labels;
     }
 
-    public int getValue(){
+    public ValueType getValue(){
         return value;
     }
 

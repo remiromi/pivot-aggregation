@@ -6,12 +6,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PivotNode<LabelType> {
+public class PivotNode<LabelType, ValueType extends Number> {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private LabelType label;
-    private int value;
-    private final Set<PivotNode<LabelType>> children = new HashSet<>();
+    private ValueType value;
+    private final Set<PivotNode<LabelType, ValueType>> children = new HashSet<>();
 
     public PivotNode(){}
 
@@ -19,19 +19,19 @@ public class PivotNode<LabelType> {
         this.label = label;
     }
 
-    public PivotNode(LabelType label, int value) {
+    public PivotNode(LabelType label, ValueType value) {
         this.label = label;
         this.value = value;
     }
 
-    public void addChild(PivotNode<LabelType> newChild){
+    public void addChild(PivotNode<LabelType, ValueType> newChild){
         logger.log(Level.FINEST,"Calling addChild for node: " + newChild.getLabel());
         // TODO Check sum value if already existing
         this.getChildren().add(newChild);
     }
 
-    public PivotNode<LabelType> getChildFromLabel(LabelType theLabel){
-        for(PivotNode<LabelType> child : children){
+    public PivotNode<LabelType, ValueType> getChildFromLabel(LabelType theLabel){
+        for(PivotNode<LabelType, ValueType> child : children){
             if(child.getLabel().equals(theLabel)){
                 return child;
             }
@@ -43,7 +43,7 @@ public class PivotNode<LabelType> {
         return label;
     }
 
-    public int getValue() {
+    public ValueType getValue() {
         return value;
     }
 
@@ -51,11 +51,11 @@ public class PivotNode<LabelType> {
         return children.isEmpty();
     }
 
-    public Set<PivotNode<LabelType>> getChildren() {
+    public Set<PivotNode<LabelType, ValueType>> getChildren() {
         return children;
     }
 
-    public void setValue(int value) {
+    public void setValue(ValueType value) {
         this.value = value;
     }
 
@@ -72,7 +72,7 @@ public class PivotNode<LabelType> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PivotNode<LabelType> pivotNode = (PivotNode<LabelType>) o;
+        PivotNode<LabelType, ValueType> pivotNode = (PivotNode<LabelType, ValueType>) o;
         return label.equals(pivotNode.getLabel());
     }
 

@@ -2,7 +2,6 @@ package pivot;
 
 import exception.LabelNotFoundException;
 import org.junit.jupiter.api.Test;
-import pivot.PivotTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,50 +23,50 @@ class PivotTreeTest {
     @Test
     void testAddRowEmptyTree() {
 
-        PivotTree<String> tree = new PivotTree<>(aggregationAsSum);
+        PivotTree<String, Integer> tree = new PivotTree<>(aggregationAsSum);
 
         tree.addRow(startingRow, 1);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":null, \"children\":[{\"label\":\"Node I\", \"value\":null, \"children\":[{\"label\":\"Node J\", \"value\":null, \"children\":[{\"label\":\"Node C\", \"value\":null, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
     @Test
     void testAddTwoDifferentRows() {
-        PivotTree<String> tree = new PivotTree<>(aggregationAsSum);
+        PivotTree<String, Integer> tree = new PivotTree<>(aggregationAsSum);
 
         tree.addRow(startingRow, 1);
         tree.addRow(newBranchRow, 2);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node A\", \"value\":0, \"children\":[{\"label\":\"Node B\", \"value\":0, \"children\":[{\"label\":\"Node G\", \"value\":0, \"children\":[{\"label\":\"Node H\", \"value\":2, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":null, \"children\":[{\"label\":\"Node A\", \"value\":null, \"children\":[{\"label\":\"Node B\", \"value\":null, \"children\":[{\"label\":\"Node G\", \"value\":null, \"children\":[{\"label\":\"Node H\", \"value\":2, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":null, \"children\":[{\"label\":\"Node J\", \"value\":null, \"children\":[{\"label\":\"Node C\", \"value\":null, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
     @Test
     void testAddCommonBranch() {
-        PivotTree<String> tree = new PivotTree<>(aggregationAsSum);
+        PivotTree<String, Integer> tree = new PivotTree<>(aggregationAsSum);
 
         tree.addRow(startingRow, 1);
         tree.addRow(commonBranchRow, 399);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":399, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":null, \"children\":[{\"label\":\"Node I\", \"value\":null, \"children\":[{\"label\":\"Node J\", \"value\":null, \"children\":[{\"label\":\"Node C\", \"value\":null, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":399, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
     @Test
     void testAddRowAlreadyExisting() {
-        PivotTree<String> tree = new PivotTree<>(aggregationAsSum);
+        PivotTree<String, Integer> tree = new PivotTree<>(aggregationAsSum);
 
         tree.addRow(startingRow, 1);
         tree.addRow(startingRow, 999);
 
-        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":0, \"children\":[{\"label\":\"Node I\", \"value\":0, \"children\":[{\"label\":\"Node J\", \"value\":0, \"children\":[{\"label\":\"Node C\", \"value\":0, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":null, \"children\":[{\"label\":\"Node I\", \"value\":null, \"children\":[{\"label\":\"Node J\", \"value\":null, \"children\":[{\"label\":\"Node C\", \"value\":null, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
     @Test
     void testFillTreeValuesSum() {
-        PivotTree<String> tree = new PivotTree<>(aggregationAsSum);
+        PivotTree<String, Integer> tree = new PivotTree<>(aggregationAsSum);
         tree.addRow(startingRow, 1);
         tree.addRow(commonBranchRow, 28);
         tree.addRow(newBranchRow, 21);
@@ -81,7 +80,7 @@ class PivotTreeTest {
     @Test
     void testFillTreeValuesMax() {
         Function<List<Integer>, Integer> aggregationAsMax = (numbers) -> numbers.stream().reduce(MIN_VALUE, Integer::max);
-        PivotTree<String> tree = new PivotTree<>(aggregationAsMax);
+        PivotTree<String, Integer> tree = new PivotTree<>(aggregationAsMax);
         tree.addRow(startingRow, 1);
         tree.addRow(commonBranchRow, 28);
         tree.addRow(newBranchRow, 21);
@@ -94,7 +93,7 @@ class PivotTreeTest {
 
     @Test
     void testFindValueEmptyLabels() {
-        PivotTree<String> tree = generateFilledTree(aggregationAsSum);
+        PivotTree<String, Integer> tree = generateFilledTree(aggregationAsSum);
         List<String> labels = new ArrayList<>();
 
         Exception exception = assertThrows(LabelNotFoundException.class, () -> tree.findValue(labels) );
@@ -103,7 +102,7 @@ class PivotTreeTest {
 
     @Test
     void testFindValueNullLabels() {
-        PivotTree<String> tree = generateFilledTree(aggregationAsSum);
+        PivotTree<String, Integer> tree = generateFilledTree(aggregationAsSum);
 
         Exception exception = assertThrows(LabelNotFoundException.class, () -> tree.findValue(null) );
         assertThat(exception.getMessage()).isEqualTo("Labels is null or empty.");
@@ -111,7 +110,7 @@ class PivotTreeTest {
 
     @Test
     void testFindValueLabelNotFound(){
-        PivotTree<String> tree = generateFilledTree(aggregationAsSum);
+        PivotTree<String, Integer> tree = generateFilledTree(aggregationAsSum);
         List<String> labels = List.of("Fake Label");
 
         Exception exception = assertThrows(LabelNotFoundException.class, () -> tree.findValue(labels) );
@@ -120,7 +119,7 @@ class PivotTreeTest {
 
     @Test
     void testFindValueSingleLabelFound() throws LabelNotFoundException{
-        PivotTree<String> tree = generateFilledTree(aggregationAsSum);
+        PivotTree<String, Integer> tree = generateFilledTree(aggregationAsSum);
         List<String> labels = List.of("Node A");
 
         assertThat(tree.findValue(labels)).isEqualTo(21);
@@ -128,7 +127,7 @@ class PivotTreeTest {
 
     @Test
     void testFindValueMultipleLabelsFound() throws LabelNotFoundException{
-        PivotTree<String> tree = generateFilledTree(aggregationAsSum);
+        PivotTree<String, Integer> tree = generateFilledTree(aggregationAsSum);
         List<String> labels = List.of("Node I", "Node J", "Node C");
 
         assertThat(tree.findValue(labels)).isEqualTo(29);
@@ -136,14 +135,14 @@ class PivotTreeTest {
 
     @Test
     void testGetTotal() {
-        PivotTree<String> tree = generateFilledTree(aggregationAsSum);
+        PivotTree<String, Integer> tree = generateFilledTree(aggregationAsSum);
 
         assertThat(tree.getTotal()).isEqualTo(50);
     }
 
 
-    private PivotTree<String> generateFilledTree(Function<List<Integer>, Integer> func) {
-        PivotTree<String> tree = new PivotTree<>(func);
+    private PivotTree<String, Integer> generateFilledTree(Function<List<Integer>, Integer> func) {
+        PivotTree<String, Integer> tree = new PivotTree<>(func);
         tree.addRow(startingRow, 1);
         tree.addRow(commonBranchRow, 28);
         tree.addRow(newBranchRow, 21);

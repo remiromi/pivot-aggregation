@@ -15,7 +15,6 @@ class PivotTreeBuilderTest {
 
     @Test
     void buildTest() {
-        // TODO Build second tree and compare
         PivotTreeBuilder pivotTreeBuilder = new PivotTreeBuilder();
         List<PivotRow<String>> rows = getRows();
 

@@ -1,5 +1,7 @@
 package pivot;
 
+import exception.LabelNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,10 +51,9 @@ public class PivotTree<LabelType>{
         return currentNodeValue;
     }
 
-    public int findValue(List<LabelType> labels) throws Exception {
+    public int findValue(List<LabelType> labels) throws LabelNotFoundException {
         if(labels == null || labels.isEmpty()) {
-            // TODO Create EXCEPTION
-            throw new Exception("Labels is null or empty");
+            throw new LabelNotFoundException("Labels is null or empty.");
         }
 
         PivotNode<LabelType> currentNode = root;
@@ -60,8 +61,7 @@ public class PivotTree<LabelType>{
         for(LabelType label : labels){
             PivotNode<LabelType> child = currentNode.getChildFromLabel(label);
             if(child == null){
-                /* TODO if child is null trigger exc -> New Exception Class or descriptive message? */
-                throw new Exception("Node has no Child with label " + label + ". Insert another value.");
+                throw new LabelNotFoundException("Label with name:'" + label + "' not found.");
             }
             currentNode = child;
         }

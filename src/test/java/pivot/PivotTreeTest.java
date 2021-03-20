@@ -1,5 +1,6 @@
 package pivot;
 
+import exception.LabelNotFoundException;
 import org.junit.jupiter.api.Test;
 import pivot.PivotTree;
 
@@ -77,14 +78,16 @@ class PivotTreeTest {
         PivotTree<String> tree = generateFilledTree();
         List<String> labels = new ArrayList<>();
 
-        assertThrows(Exception.class, () -> tree.findValue(labels) );
+        Exception exception = assertThrows(LabelNotFoundException.class, () -> tree.findValue(labels) );
+        assertThat(exception.getMessage()).isEqualTo("Labels is null or empty.");
     }
 
     @Test
     void testFindValueNullLabels() {
         PivotTree<String> tree = generateFilledTree();
 
-        assertThrows(Exception.class, () -> tree.findValue(null) );
+        Exception exception = assertThrows(LabelNotFoundException.class, () -> tree.findValue(null) );
+        assertThat(exception.getMessage()).isEqualTo("Labels is null or empty.");
     }
 
     @Test
@@ -92,11 +95,12 @@ class PivotTreeTest {
         PivotTree<String> tree = generateFilledTree();
         List<String> labels = List.of("Fake Label");
 
-        assertThrows(Exception.class, () -> tree.findValue(labels) );
+        Exception exception = assertThrows(LabelNotFoundException.class, () -> tree.findValue(labels) );
+        assertThat(exception.getMessage()).isEqualTo("Label with name:'Fake Label' not found.");
     }
 
     @Test
-    void testFindValueSingleLabelFound() throws Exception{
+    void testFindValueSingleLabelFound() throws LabelNotFoundException{
         PivotTree<String> tree = generateFilledTree();
         List<String> labels = List.of("Node A");
 
@@ -104,7 +108,7 @@ class PivotTreeTest {
     }
 
     @Test
-    void testFindValueMultipleLabelsFound() throws Exception{
+    void testFindValueMultipleLabelsFound() throws LabelNotFoundException{
         PivotTree<String> tree = generateFilledTree();
         List<String> labels = List.of("Node I", "Node J", "Node C");
 

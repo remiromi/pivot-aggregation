@@ -176,6 +176,27 @@ class PivotTreeBuilderTest {
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
+    @Test
+    void testBuildCharTreeProduct() {
+        PivotTreeBuilder<Character, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
+
+        PivotTree<Character, Integer> tree = pivotTreeBuilder.build(getUnorderedCharRowsInteger(), product,
+                List.of(0, 2, 1, 3));
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":120, \"children\":[{\"label\":\"A\", \"value\":60, \"children\":[{\"label\":\"B\", \"value\":60, \"children\":[{\"label\":\"G\", \"value\":3, \"children\":[{\"label\":\"H\", \"value\":3, \"children\":[]}]}, {\"label\":\"X\", \"value\":20, \"children\":[{\"label\":\"H\", \"value\":5, \"children\":[]}, {\"label\":\"Y\", \"value\":4, \"children\":[]}]}]}]}, {\"label\":\"I\", \"value\":2, \"children\":[{\"label\":\"J\", \"value\":2, \"children\":[{\"label\":\"C\", \"value\":2, \"children\":[{\"label\":\"D\", \"value\":1, \"children\":[]}, {\"label\":\"E\", \"value\":2, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
+
+    private List<PivotRow<Character, Integer>> getUnorderedCharRowsInteger() {
+        return Arrays.asList( // order 0, 2, 1, 3
+                new PivotRow<>(Arrays.asList('I', 'C', 'J', 'D'), 1),
+                new PivotRow<>(Arrays.asList('I', 'C', 'J', 'E'), 2),
+                new PivotRow<>(Arrays.asList('A', 'G', 'B', 'H'), 3),
+                new PivotRow<>(Arrays.asList('A', 'X', 'B', 'Y'), 4),
+                new PivotRow<>(Arrays.asList('A', 'X', 'B', 'H'), 5)
+        );
+    }
+
     private List<PivotRow<String, Integer>> getRowsInteger() {
         return Arrays.asList(
                 new PivotRow<>(firstRow, 1),

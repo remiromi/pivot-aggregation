@@ -2,29 +2,27 @@
 
 ## Abstract
 This is a Java Library developed as exercise. The following document contains a description of the exposed functionality,
-the installation procedure and a technical introduction. 
+the installation procedure and a technical introduction with an example. 
 
 ## Introduction
 The library builds a PivotTree, built on the three input parameters: data rows, an aggregation function, an 
-aggregation order. The 
-## Exposed Function
+aggregation order. The output is a tree that can be queried to find out the aggregation at any level (any tree node).
 
-### Function Signature Explanation
-### Assumptions on the input
-- The row is a generic tuple
-- Elements search is assumed to be queried only in order: e.g. Nation -> Hair Color -> Eyes Color
- -> implica che io possa cercare solo in quest'ordine (non Capelli senza Nazione),
-  perché se voglio un altro ordine ricostruisco l'albero -> TODO Controlla aggiunta foglia duplicata
-  
-### Output Description
+## Exposed Functions
+#### PivotTreeBuilder.build()
+There are two similar build functions: they both initialize, build and fill an aggregation tree according to the 
+provided input. The only difference concerns the aggregation order parameter: in the
+`build(List<PivotRow<LabelType, ValueType>> rows, Function<List<ValueType>, ValueType> aggregationFunction)`
+method the rows input are assumed to be ordered. In the other _**build()**_ method, there is also the reordering part that 
+is applied.
 
-## Technical Documentation
+#### QueryableTree.findValue(_List<LabelType> labels_)
+Takes as input the labels to find and returns the requested aggregation value.
+If the queried label does not exist, it throws a LabelNotFoundException, when there is no label match.
 
-### pivot.PivotNode
-### pivot.PivotTree
-### pivot.PivotTreemvn
-### pivot.PivotTreeBuilder
-
+#### QueryableTree.getTotal()
+Returns the total aggregation value. The same logic of the findValue method, but with an empty Labels value.
+This logic was implemented to return the Tree root value as base command.
 
 ## Install and Import 
 To install the library, first clone this repo with:
@@ -47,10 +45,16 @@ After the build is successful, in the `pom.xml` we can add the dependency as fol
 </dependency>
 ```
 
+### Assumptions on the input
+- All rows in the DATA input are **tuples** with the same size
+- The row is a generic tuple where all elements are of the **same type**
+- Elements search is assumed to be queried **only in order**: _e.g. Nation -> Hair Color -> Eyes Color_ , meaning that
+  different aggregation orders belong to different trees
+  
 ## Usage Example
 Once the library is imported in your project, it's possible to build the pivot tree and query it.
 
-**Input** is a `List<PivotRow<LabelDomain,ValueDomain>` object. If we have String labels and int number we have values like:
+**DATA** is a `List<PivotRow<LabelDomain,ValueDomain>` object. If we have String labels and Integers we have values like:
 ```java
 List<PivotRow<String,Integer> pivotRows = Arrays.asList(
 new PivotRow<>(Arrays.asList("Node D","Node C","Node J","Node I"), 1),
@@ -92,5 +96,6 @@ List<String> queryLabels = List.of("Node D", "Node C","Node J","Node I");
 int lastValue = tree.findValue(queryLabels);
 ```
 
-## Possible improvements
-- Add Execution log file
+### Possible improvements
+- Add Execution log file to monitor operations
+- Private methods Javadoc Refinement

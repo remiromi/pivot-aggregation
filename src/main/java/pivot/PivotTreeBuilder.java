@@ -6,6 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * This class is a functional component that initializes a QueryableTree object.
+ *
+ * It builds the tree and then initializes all node values, both for the single branches and for the inner
+ * aggregation nodes.
+ *
+ * @param <LabelType> The row labels domain (e.g. String, Character)
+ * @param <ValueType> The value domain (e.g. Integer, Float)
+ */
 public class PivotTreeBuilder<LabelType, ValueType extends Number> {
 
     private Function<List<ValueType>, ValueType> aggregationFunction;
@@ -13,10 +22,14 @@ public class PivotTreeBuilder<LabelType, ValueType extends Number> {
     private Map<List<LabelType>, List<ValueType>> leafValues;
 
     /**
+     * Builds the QueryableTree without reordering the rows.
      *
-     * @param rows
-     * @param aggregationFunction
-     * @return
+     * Generate a tree with a branch for any row. If a row has a part of the branch already in the tree, it adds the
+     * new nodes only.
+     *
+     * @param rows The input data, formatted as PivotRow List.
+     * @param aggregationFunction The function to use when aggregating data.
+     * @return The unordered aggregated tree.
      */
     public QueryableTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
                                                  Function<List<ValueType>, ValueType> aggregationFunction) {
@@ -29,11 +42,12 @@ public class PivotTreeBuilder<LabelType, ValueType extends Number> {
     }
 
     /**
+     * Builds the QueryableTree, reordering the rows according the aggregation order.
      *
-     * @param rows
-     * @param aggregationFunction
-     * @param aggregationOrder
-     * @return
+     * @param rows The input data.
+     * @param aggregationFunction The function to use when aggregating data.
+     * @param aggregationOrder The list of indexes to order each row.
+     * @return The ordered aggregated tree.
      */
     public QueryableTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
                                                  Function<List<ValueType>, ValueType> aggregationFunction,

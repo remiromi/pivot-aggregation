@@ -26,7 +26,6 @@ public class PivotNode<LabelType, ValueType extends Number> {
 
     public void addChild(PivotNode<LabelType, ValueType> newChild){
         logger.log(Level.FINEST,"Calling addChild for node: " + newChild.getLabel());
-        // TODO Check sum value if already existing
         this.getChildren().add(newChild);
     }
 

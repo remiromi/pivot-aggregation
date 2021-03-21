@@ -33,7 +33,6 @@ maven clean install -> pivot Snapshot
 #### TODOs
 
     // TODO : Generalize and introduce aggregation order -> refactor Row with order and then use addBranch
-// TODO : addRow nel builder e non nel tree
 
 ## Possible improvements
 - Add Execution log file

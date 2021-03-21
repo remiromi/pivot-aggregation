@@ -94,6 +94,34 @@ class PivotTreeBuilderTest {
     }
 
     @Test
+    void testAddMultipleIdenticalRowsSum() {
+        PivotTreeBuilder<String, Integer> treeBuilder = new PivotTreeBuilder<>();
+
+        PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
+        PivotRow<String, Integer> differentValueRow = new PivotRow<>(firstRow, 499);
+        PivotRow<String, Integer> anotherDifferentValueRow = new PivotRow<>(firstRow, 500);
+
+        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, differentValueRow, anotherDifferentValueRow), sum);
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":1000, \"children\":[{\"label\":\"Node I\", \"value\":1000, \"children\":[{\"label\":\"Node J\", \"value\":1000, \"children\":[{\"label\":\"Node C\", \"value\":1000, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
+
+    @Test
+    void testAddMultipleIdenticalRowsAverage() {
+        PivotTreeBuilder<String, Float> treeBuilder = new PivotTreeBuilder<>();
+
+        PivotRow<String, Float> startingRow = new PivotRow<>(firstRow, 3f);
+        PivotRow<String, Float> secondSameRow = new PivotRow<>(firstRow, 4f);
+        PivotRow<String, Float> thirdSameRow = new PivotRow<>(firstRow, 5f);
+
+        PivotTree<String, Float> tree = treeBuilder.build(List.of(startingRow, secondSameRow, thirdSameRow), average);
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":4.0, \"children\":[{\"label\":\"Node I\", \"value\":4.0, \"children\":[{\"label\":\"Node J\", \"value\":4.0, \"children\":[{\"label\":\"Node C\", \"value\":4.0, \"children\":[{\"label\":\"Node D\", \"value\":4.0, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
+
+    @Test
     void testBuildIntegerTree() {
         PivotTreeBuilder<String, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
         List<PivotRow<String, Integer>> rows = getRowsInteger();

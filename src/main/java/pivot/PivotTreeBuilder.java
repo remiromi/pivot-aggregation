@@ -1,19 +1,23 @@
 package pivot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class PivotTreeBuilder<LabelType, ValueType extends Number> {
 
     private Function<List<ValueType>, ValueType> aggregationFunction;
     private PivotTree<LabelType, ValueType> tree;
+    private Map<List<LabelType>, List<ValueType>> leafValues;
 
     public PivotTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
                                                  Function<List<ValueType>, ValueType> aggregationFunction) {
         // Pensa all'aggregation order
         this.tree = new PivotTree<>();
         this.aggregationFunction = aggregationFunction;
+        this.leafValues = new HashMap<>();
         rows.forEach(this::addBranch);
         fillTreeValues();
         return tree;
@@ -31,19 +35,25 @@ public class PivotTreeBuilder<LabelType, ValueType extends Number> {
             previousNode.addChild(newChild);
             previousNode = previousNode.getChildFromLabel(currentLabel);
         }
-        // TODO multiple values in single row?
         addLeafNode(labels, value, previousNode);
     }
 
     private void addLeafNode(List<LabelType> labels, ValueType value, PivotNode<LabelType, ValueType> parentNode) {
         LabelType leafLabel = labels.get(labels.size()-1);
         PivotNode<LabelType, ValueType> leafChild = parentNode.getChildFromLabel(leafLabel);
+        updateLeafValues(labels, value);
         if(leafChild != null) {
-            leafChild.setValue(aggregationFunction.apply(List.of(leafChild.getValue(), value)));
+            leafChild.setValue(aggregationFunction.apply(leafValues.get(labels)));
         }
         else {
             parentNode.addChild(new PivotNode<>(leafLabel, value));
         }
+    }
+
+    private void updateLeafValues(List<LabelType> labels, ValueType value) {
+        List<ValueType> values = leafValues.getOrDefault(labels, new ArrayList<>());
+        values.add(value);
+        leafValues.put(labels, values);
     }
 
     private void fillTreeValues(){

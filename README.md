@@ -26,13 +26,68 @@ aggregation order. The
 ### pivot.PivotTreeBuilder
 
 
-## Install Procedure
-maven clean install -> pivot Snapshot
+## Install and Import 
+To install the library, first clone this repo with:
+```bash
+git clone https://github.com/remiromi/pivot-aggregation.git
+``` 
+Then, in the repo directory run the command to build it:
+```bash
+maven clean install
+```
+After the build is successful, in the `pom.xml` we can add the dependency as follows:
+```xml
+<dependency>
+  <groupId>com.romano</groupId>
+  <artifactId>pivot-aggregation</artifactId>
+  <version>1.0-SNAPSHOT</version>
+</dependency>
+```
 
+## Usage Example
+Once the library is imported in your project, it's possible to build the pivot tree and query it.
 
-#### TODOs
+**Input** is a `List<PivotRow<LabelDomain,ValueDomain>` object. If we have String labels and int number we have values like:
+```java
+List<PivotRow<String,Integer> pivotRows = Arrays.asList(
+new PivotRow<>(Arrays.asList("Node D","Node C","Node J","Node I"), 1),
+new PivotRow<>(Arrays.asList("Node E","Node C","Node J","Node I"), 2),
+new PivotRow<>(Arrays.asList("Node H","Node G","Node B","Node A"), 3),
+new PivotRow<>(Arrays.asList("Node Y","Node X","Node B","Node A"), 4),
+new PivotRow<>(Arrays.asList("Node H","Node X","Node B","Node A"), 5));
+```
+The second input argument is an **aggregation function**, meaning any function that takes a collection of numerical 
+values as an input and returns a single value:
+```java
+Function<List<Integer>, Integer> sum = (numbers) -> numbers.stream().reduce(0, Integer::sum);
+```
+The third input (optional), consists in an aggregation order, which represents the description of 
+the aggregation hierarchy:
+```java
+List<Integer> aggregationOrder = List.of(3, 2, 1, 0);
+```
 
-    // TODO : Generalize and introduce aggregation order -> refactor Row with order and then use addBranch
+Once all inputs are instantiated, we can build the Pivot tree by using the PivotTreeBuilder as follows:
+```java
+// Case no specific aggregation order -> rows ordered already
+QueryableTree<String, Integer> tree = new PivotTreeBuilder().build(pivotRows, sum);
+
+// Case different aggregation order -> rows to be ordered
+QueryableTree<String, Integer> tree = new PivotTreeBuilder().build(pivotRows, sum, aggregationOrder);
+```
+Now the tree is returned with all nodes set to the appropriate value. We can query it by running:
+```java
+// Method that returns tree root value (Global Aggregation)
+int totalValue = tree.getTotal();
+
+// Labels declaration -> Middle level
+List<String> queryLabels = List.of("Node D", "Node C");
+int middleValue = tree.findValue(queryLabels);
+
+// Labels declaration -> Last level
+List<String> queryLabels = List.of("Node D", "Node C","Node J","Node I");
+int lastValue = tree.findValue(queryLabels);
+```
 
 ## Possible improvements
 - Add Execution log file

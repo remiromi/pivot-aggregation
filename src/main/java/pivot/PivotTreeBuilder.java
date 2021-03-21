@@ -12,7 +12,13 @@ public class PivotTreeBuilder<LabelType, ValueType extends Number> {
     private PivotTree<LabelType, ValueType> tree;
     private Map<List<LabelType>, List<ValueType>> leafValues;
 
-    public PivotTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
+    /**
+     *
+     * @param rows
+     * @param aggregationFunction
+     * @return
+     */
+    public QueryableTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
                                                  Function<List<ValueType>, ValueType> aggregationFunction) {
         this.tree = new PivotTree<>();
         this.aggregationFunction = aggregationFunction;
@@ -22,7 +28,14 @@ public class PivotTreeBuilder<LabelType, ValueType extends Number> {
         return tree;
     }
 
-    public PivotTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
+    /**
+     *
+     * @param rows
+     * @param aggregationFunction
+     * @param aggregationOrder
+     * @return
+     */
+    public QueryableTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
                                                  Function<List<ValueType>, ValueType> aggregationFunction,
                                                  List<Integer> aggregationOrder) {
         List<PivotRow<LabelType, ValueType>> orderedRows = orderRows(rows, aggregationOrder);

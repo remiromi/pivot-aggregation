@@ -4,7 +4,7 @@ import exception.LabelNotFoundException;
 
 import java.util.List;
 
-public class PivotTree<LabelType, ValueType extends Number>{
+public class PivotTree<LabelType, ValueType extends Number> implements QueryableTree<LabelType, ValueType> {
 
     private final PivotNode<LabelType, ValueType> root;
 
@@ -12,6 +12,7 @@ public class PivotTree<LabelType, ValueType extends Number>{
         this.root = new PivotNode<>();
     }
 
+    @Override
     public ValueType findValue(List<LabelType> labels) throws LabelNotFoundException {
         if(labels == null || labels.isEmpty()) {
             throw new LabelNotFoundException("Labels is null or empty.");
@@ -29,6 +30,7 @@ public class PivotTree<LabelType, ValueType extends Number>{
         return currentNode.getValue();
     }
 
+    @Override
     public ValueType getTotal(){
         return root.getValue();
     }

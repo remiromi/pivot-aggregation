@@ -47,7 +47,7 @@ class PivotTreeBuilderTest {
         PivotTreeBuilder<String, Integer> treeBuilder = new PivotTreeBuilder<>();
         PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
 
-        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow), sum);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) treeBuilder.build(List.of(startingRow), sum);
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":1, \"children\":[{\"label\":\"Node I\", \"value\":1, \"children\":[{\"label\":\"Node J\", \"value\":1, \"children\":[{\"label\":\"Node C\", \"value\":1, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -60,7 +60,7 @@ class PivotTreeBuilderTest {
         PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
         PivotRow<String, Integer> newBranchRow = new PivotRow<>(thirdRow, 2);
 
-        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, newBranchRow), sum);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) treeBuilder.build(List.of(startingRow, newBranchRow), sum);
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":3, \"children\":[{\"label\":\"Node A\", \"value\":2, \"children\":[{\"label\":\"Node B\", \"value\":2, \"children\":[{\"label\":\"Node G\", \"value\":2, \"children\":[{\"label\":\"Node H\", \"value\":2, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":1, \"children\":[{\"label\":\"Node J\", \"value\":1, \"children\":[{\"label\":\"Node C\", \"value\":1, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -74,7 +74,7 @@ class PivotTreeBuilderTest {
         PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
         PivotRow<String, Integer> commonBranchRow = new PivotRow<>(secondRow, 399);
 
-        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, commonBranchRow), sum);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) treeBuilder.build(List.of(startingRow, commonBranchRow), sum);
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":400, \"children\":[{\"label\":\"Node I\", \"value\":400, \"children\":[{\"label\":\"Node J\", \"value\":400, \"children\":[{\"label\":\"Node C\", \"value\":400, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":399, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -87,7 +87,7 @@ class PivotTreeBuilderTest {
         PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
         PivotRow<String, Integer> differentValueRow = new PivotRow<>(firstRow, 999);
 
-        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, differentValueRow), sum);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) treeBuilder.build(List.of(startingRow, differentValueRow), sum);
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":1000, \"children\":[{\"label\":\"Node I\", \"value\":1000, \"children\":[{\"label\":\"Node J\", \"value\":1000, \"children\":[{\"label\":\"Node C\", \"value\":1000, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -101,7 +101,7 @@ class PivotTreeBuilderTest {
         PivotRow<String, Integer> differentValueRow = new PivotRow<>(firstRow, 499);
         PivotRow<String, Integer> anotherDifferentValueRow = new PivotRow<>(firstRow, 500);
 
-        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, differentValueRow, anotherDifferentValueRow), sum);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) treeBuilder.build(List.of(startingRow, differentValueRow, anotherDifferentValueRow), sum);
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":1000, \"children\":[{\"label\":\"Node I\", \"value\":1000, \"children\":[{\"label\":\"Node J\", \"value\":1000, \"children\":[{\"label\":\"Node C\", \"value\":1000, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -115,7 +115,7 @@ class PivotTreeBuilderTest {
         PivotRow<String, Float> secondSameRow = new PivotRow<>(firstRow, 4f);
         PivotRow<String, Float> thirdSameRow = new PivotRow<>(firstRow, 5f);
 
-        PivotTree<String, Float> tree = treeBuilder.build(List.of(startingRow, secondSameRow, thirdSameRow), average);
+        PivotTree<String, Float> tree = (PivotTree<String, Float>) treeBuilder.build(List.of(startingRow, secondSameRow, thirdSameRow), average);
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":4.0, \"children\":[{\"label\":\"Node I\", \"value\":4.0, \"children\":[{\"label\":\"Node J\", \"value\":4.0, \"children\":[{\"label\":\"Node C\", \"value\":4.0, \"children\":[{\"label\":\"Node D\", \"value\":4.0, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -126,7 +126,7 @@ class PivotTreeBuilderTest {
         PivotTreeBuilder<String, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
         List<PivotRow<String, Integer>> rows = getRowsInteger();
 
-        PivotTree<String, Integer> tree = pivotTreeBuilder.build(rows, product);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) pivotTreeBuilder.build(rows, product);
 
         String expectedIntegerTree = "{\"root\":{\"label\":\"null\", \"value\":120, \"children\":[{\"label\":\"Node A\", \"value\":60, \"children\":[{\"label\":\"Node B\", \"value\":60, \"children\":[{\"label\":\"Node X\", \"value\":20, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":2, \"children\":[{\"label\":\"Node J\", \"value\":2, \"children\":[{\"label\":\"Node C\", \"value\":2, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedIntegerTree);
@@ -137,7 +137,7 @@ class PivotTreeBuilderTest {
         PivotTreeBuilder<String, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
         List<PivotRow<String, Integer>> rows = getUnorderedRowsInteger();
 
-        PivotTree<String, Integer> tree = pivotTreeBuilder.build(rows, product, List.of(3, 2, 1, 0));
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) pivotTreeBuilder.build(rows, product, List.of(3, 2, 1, 0));
 
         String expectedIntegerTree = "{\"root\":{\"label\":\"null\", \"value\":120, \"children\":[{\"label\":\"Node A\", \"value\":60, \"children\":[{\"label\":\"Node B\", \"value\":60, \"children\":[{\"label\":\"Node X\", \"value\":20, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":2, \"children\":[{\"label\":\"Node J\", \"value\":2, \"children\":[{\"label\":\"Node C\", \"value\":2, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedIntegerTree);
@@ -148,7 +148,7 @@ class PivotTreeBuilderTest {
         PivotTreeBuilder<String, Float> pivotTreeBuilder = new PivotTreeBuilder<>();
         List<PivotRow<String, Float>> rows = getRowsFloat();
 
-        PivotTree<String, Float> tree = pivotTreeBuilder.build(rows, average);
+        PivotTree<String, Float> tree = (PivotTree<String, Float>) pivotTreeBuilder.build(rows, average);
 
         String expectedFloatTree = "{\"root\":{\"label\":\"null\", \"value\":262.5, \"children\":[{\"label\":\"Node A\", \"value\":375.0, \"children\":[{\"label\":\"Node B\", \"value\":375.0, \"children\":[{\"label\":\"Node X\", \"value\":450.0, \"children\":[{\"label\":\"Node H\", \"value\":500.0, \"children\":[]}, {\"label\":\"Node Y\", \"value\":400.0, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":300.0, \"children\":[{\"label\":\"Node H\", \"value\":300.0, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":150.0, \"children\":[{\"label\":\"Node J\", \"value\":150.0, \"children\":[{\"label\":\"Node C\", \"value\":150.0, \"children\":[{\"label\":\"Node D\", \"value\":100.0, \"children\":[]}, {\"label\":\"Node E\", \"value\":200.0, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedFloatTree);
@@ -159,7 +159,7 @@ class PivotTreeBuilderTest {
         PivotTreeBuilder<String, BigInteger> pivotTreeBuilder = new PivotTreeBuilder<>();
         List<PivotRow<String, BigInteger>> rows = getRowsBigInt();
 
-        PivotTree<String, BigInteger> tree = pivotTreeBuilder.build(rows, minimum);
+        PivotTree<String, BigInteger> tree = (PivotTree<String, BigInteger>) pivotTreeBuilder.build(rows, minimum);
 
         String expectedBigIntegerTree = "{\"root\":{\"label\":\"null\", \"value\":101, \"children\":[{\"label\":\"Node A\", \"value\":303, \"children\":[{\"label\":\"Node B\", \"value\":303, \"children\":[{\"label\":\"Node X\", \"value\":404, \"children\":[{\"label\":\"Node H\", \"value\":505, \"children\":[]}, {\"label\":\"Node Y\", \"value\":404, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":303, \"children\":[{\"label\":\"Node H\", \"value\":303, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":101, \"children\":[{\"label\":\"Node J\", \"value\":101, \"children\":[{\"label\":\"Node C\", \"value\":101, \"children\":[{\"label\":\"Node D\", \"value\":101, \"children\":[]}, {\"label\":\"Node E\", \"value\":202, \"children\":[]}]}]}]}]}}";
 
@@ -170,7 +170,7 @@ class PivotTreeBuilderTest {
     void testBuildTreeMax() {
         PivotTreeBuilder<String, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
 
-        PivotTree<String, Integer> tree = pivotTreeBuilder.build(getRowsInteger(), max);
+        PivotTree<String, Integer> tree = (PivotTree<String, Integer>) pivotTreeBuilder.build(getRowsInteger(), max);
 
         String expectedTreeString ="{\"root\":{\"label\":\"null\", \"value\":5, \"children\":[{\"label\":\"Node A\", \"value\":5, \"children\":[{\"label\":\"Node B\", \"value\":5, \"children\":[{\"label\":\"Node X\", \"value\":5, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":2, \"children\":[{\"label\":\"Node J\", \"value\":2, \"children\":[{\"label\":\"Node C\", \"value\":2, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
         assertThat(tree.toString()).isEqualTo(expectedTreeString);
@@ -180,7 +180,7 @@ class PivotTreeBuilderTest {
     void testBuildCharTreeProduct() {
         PivotTreeBuilder<Character, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
 
-        PivotTree<Character, Integer> tree = pivotTreeBuilder.build(getUnorderedCharRowsInteger(), product,
+        PivotTree<Character, Integer> tree = (PivotTree<Character, Integer>) pivotTreeBuilder.build(getUnorderedCharRowsInteger(), product,
                 List.of(0, 2, 1, 3));
 
         String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":120, \"children\":[{\"label\":\"A\", \"value\":60, \"children\":[{\"label\":\"B\", \"value\":60, \"children\":[{\"label\":\"G\", \"value\":3, \"children\":[{\"label\":\"H\", \"value\":3, \"children\":[]}]}, {\"label\":\"X\", \"value\":20, \"children\":[{\"label\":\"H\", \"value\":5, \"children\":[]}, {\"label\":\"Y\", \"value\":4, \"children\":[]}]}]}]}, {\"label\":\"I\", \"value\":2, \"children\":[{\"label\":\"J\", \"value\":2, \"children\":[{\"label\":\"C\", \"value\":2, \"children\":[{\"label\":\"D\", \"value\":1, \"children\":[]}, {\"label\":\"E\", \"value\":2, \"children\":[]}]}]}]}]}}";

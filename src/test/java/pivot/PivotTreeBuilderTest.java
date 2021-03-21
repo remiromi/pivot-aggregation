@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class PivotTreeBuilderTest {
@@ -16,6 +18,12 @@ class PivotTreeBuilderTest {
     private final List<String> thirdRow = Arrays.asList("Node A","Node B","Node G","Node H");
     private final List<String> fourthRow = Arrays.asList("Node A","Node B","Node X","Node Y");
     private final List<String> fifthRow = Arrays.asList("Node A","Node B","Node X","Node H");
+
+    private final Function<List<Integer>, Integer> sum = (numbers) -> numbers.stream().reduce(0, Integer::sum);
+    private final Function<List<Integer>, Integer> max = (numbers) -> numbers.stream().reduce(MIN_VALUE, Integer::max);
+
+    private final Function<List<BigInteger>, BigInteger> minimum = (numbers) ->
+            numbers.stream().reduce(new BigInteger(String.valueOf(MAX_VALUE)), BigInteger::min);
 
     private final Function<List<Integer>, Integer> product = (numbers) -> {
         int prod = 1;
@@ -33,8 +41,57 @@ class PivotTreeBuilderTest {
         return sum / numbers.size();
     };
 
-    private final Function<List<BigInteger>, BigInteger> minimum = (numbers) ->
-        numbers.stream().reduce(new BigInteger(String.valueOf(Integer.MAX_VALUE)), BigInteger::min);
+    @Test
+    void testAddRowEmptyTree() {
+
+        PivotTreeBuilder<String, Integer> treeBuilder = new PivotTreeBuilder<>();
+        PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
+
+        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow), sum);
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":1, \"children\":[{\"label\":\"Node I\", \"value\":1, \"children\":[{\"label\":\"Node J\", \"value\":1, \"children\":[{\"label\":\"Node C\", \"value\":1, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
+
+    @Test
+    void testAddTwoDifferentRows() {
+        PivotTreeBuilder<String, Integer> treeBuilder = new PivotTreeBuilder<>();
+
+        PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
+        PivotRow<String, Integer> newBranchRow = new PivotRow<>(thirdRow, 2);
+
+        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, newBranchRow), sum);
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":3, \"children\":[{\"label\":\"Node A\", \"value\":2, \"children\":[{\"label\":\"Node B\", \"value\":2, \"children\":[{\"label\":\"Node G\", \"value\":2, \"children\":[{\"label\":\"Node H\", \"value\":2, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":1, \"children\":[{\"label\":\"Node J\", \"value\":1, \"children\":[{\"label\":\"Node C\", \"value\":1, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
+
+   @Test
+    void testAddCommonBranch() {
+
+        PivotTreeBuilder<String, Integer> treeBuilder = new PivotTreeBuilder<>();
+
+        PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
+        PivotRow<String, Integer> commonBranchRow = new PivotRow<>(secondRow, 399);
+
+        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, commonBranchRow), sum);
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":400, \"children\":[{\"label\":\"Node I\", \"value\":400, \"children\":[{\"label\":\"Node J\", \"value\":400, \"children\":[{\"label\":\"Node C\", \"value\":400, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":399, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
+
+    @Test
+    void testAddRowAlreadyExisting() {
+        PivotTreeBuilder<String, Integer> treeBuilder = new PivotTreeBuilder<>();
+
+        PivotRow<String, Integer> startingRow = new PivotRow<>(firstRow, 1);
+        PivotRow<String, Integer> differentValueRow = new PivotRow<>(firstRow, 999);
+
+        PivotTree<String, Integer> tree = treeBuilder.build(List.of(startingRow, differentValueRow), sum);
+
+        String expectedTreeString = "{\"root\":{\"label\":\"null\", \"value\":1000, \"children\":[{\"label\":\"Node I\", \"value\":1000, \"children\":[{\"label\":\"Node J\", \"value\":1000, \"children\":[{\"label\":\"Node C\", \"value\":1000, \"children\":[{\"label\":\"Node D\", \"value\":1000, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
+    }
 
     @Test
     void testBuildIntegerTree() {
@@ -68,6 +125,16 @@ class PivotTreeBuilderTest {
         String expectedBigIntegerTree = "{\"root\":{\"label\":\"null\", \"value\":101, \"children\":[{\"label\":\"Node A\", \"value\":303, \"children\":[{\"label\":\"Node B\", \"value\":303, \"children\":[{\"label\":\"Node X\", \"value\":404, \"children\":[{\"label\":\"Node H\", \"value\":505, \"children\":[]}, {\"label\":\"Node Y\", \"value\":404, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":303, \"children\":[{\"label\":\"Node H\", \"value\":303, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":101, \"children\":[{\"label\":\"Node J\", \"value\":101, \"children\":[{\"label\":\"Node C\", \"value\":101, \"children\":[{\"label\":\"Node D\", \"value\":101, \"children\":[]}, {\"label\":\"Node E\", \"value\":202, \"children\":[]}]}]}]}]}}";
 
         assertThat(tree.toString()).isEqualTo(expectedBigIntegerTree);
+    }
+
+    @Test
+    void testBuildTreeMax() {
+        PivotTreeBuilder<String, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
+
+        PivotTree<String, Integer> tree = pivotTreeBuilder.build(getRowsInteger(), max);
+
+        String expectedTreeString ="{\"root\":{\"label\":\"null\", \"value\":5, \"children\":[{\"label\":\"Node A\", \"value\":5, \"children\":[{\"label\":\"Node B\", \"value\":5, \"children\":[{\"label\":\"Node X\", \"value\":5, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":2, \"children\":[{\"label\":\"Node J\", \"value\":2, \"children\":[{\"label\":\"Node C\", \"value\":2, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedTreeString);
     }
 
     private List<PivotRow<String, Integer>> getRowsInteger() {

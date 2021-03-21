@@ -22,7 +22,7 @@ aggregation order. The
 
 ### pivot.PivotNode
 ### pivot.PivotTree
-### pivot.PivotTree
+### pivot.PivotTreemvn
 ### pivot.PivotTreeBuilder
 
 
@@ -31,9 +31,12 @@ To install the library, first clone this repo with:
 ```bash
 git clone https://github.com/remiromi/pivot-aggregation.git
 ``` 
-Then, in the repo directory run the command to build it:
+Then, in the repo directory run the command to build it in local:
 ```bash
-maven clean install
+# SET JAVA_HOME to JAVA 11
+set JAVA_HOME="<JAVA11 path>"
+# Install
+mvn clean install
 ```
 After the build is successful, in the `pom.xml` we can add the dependency as follows:
 ```xml

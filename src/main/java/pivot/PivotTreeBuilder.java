@@ -14,13 +14,37 @@ public class PivotTreeBuilder<LabelType, ValueType extends Number> {
 
     public PivotTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
                                                  Function<List<ValueType>, ValueType> aggregationFunction) {
-        // Pensa all'aggregation order
         this.tree = new PivotTree<>();
         this.aggregationFunction = aggregationFunction;
         this.leafValues = new HashMap<>();
         rows.forEach(this::addBranch);
         fillTreeValues();
         return tree;
+    }
+
+    public PivotTree<LabelType, ValueType> build(List<PivotRow<LabelType, ValueType>> rows,
+                                                 Function<List<ValueType>, ValueType> aggregationFunction,
+                                                 List<Integer> aggregationOrder) {
+        List<PivotRow<LabelType, ValueType>> orderedRows = orderRows(rows, aggregationOrder);
+        return build(orderedRows, aggregationFunction);
+    }
+
+    private List<PivotRow<LabelType,ValueType>> orderRows(List<PivotRow<LabelType,ValueType>> rows,
+                                                          List<Integer> aggregationOrder) {
+        List<PivotRow<LabelType, ValueType>> orderedRows = new ArrayList<>();
+
+        for (PivotRow<LabelType,ValueType> row : rows)
+            orderedRows.add(new PivotRow<>(getOrderedRow(aggregationOrder, row.getLabels()), row.getValue()));
+
+        return orderedRows;
+    }
+
+    private List<LabelType> getOrderedRow(List<Integer> aggregationOrder, List<LabelType> unorderedLabels) {
+        List<LabelType> orderedLabels = new ArrayList<>();
+        for(int index : aggregationOrder){
+            orderedLabels.add(unorderedLabels.get(index));
+        }
+        return orderedLabels;
     }
 
     private void addBranch(PivotRow<LabelType, ValueType> theRow) {

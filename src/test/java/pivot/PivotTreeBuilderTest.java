@@ -133,6 +133,17 @@ class PivotTreeBuilderTest {
     }
 
     @Test
+    void testBuildOrderedIntegerTree() {
+        PivotTreeBuilder<String, Integer> pivotTreeBuilder = new PivotTreeBuilder<>();
+        List<PivotRow<String, Integer>> rows = getUnorderedRowsInteger();
+
+        PivotTree<String, Integer> tree = pivotTreeBuilder.build(rows, product, List.of(3, 2, 1, 0));
+
+        String expectedIntegerTree = "{\"root\":{\"label\":\"null\", \"value\":120, \"children\":[{\"label\":\"Node A\", \"value\":60, \"children\":[{\"label\":\"Node B\", \"value\":60, \"children\":[{\"label\":\"Node X\", \"value\":20, \"children\":[{\"label\":\"Node H\", \"value\":5, \"children\":[]}, {\"label\":\"Node Y\", \"value\":4, \"children\":[]}]}, {\"label\":\"Node G\", \"value\":3, \"children\":[{\"label\":\"Node H\", \"value\":3, \"children\":[]}]}]}]}, {\"label\":\"Node I\", \"value\":2, \"children\":[{\"label\":\"Node J\", \"value\":2, \"children\":[{\"label\":\"Node C\", \"value\":2, \"children\":[{\"label\":\"Node D\", \"value\":1, \"children\":[]}, {\"label\":\"Node E\", \"value\":2, \"children\":[]}]}]}]}]}}";
+        assertThat(tree.toString()).isEqualTo(expectedIntegerTree);
+    }
+
+    @Test
     void testBuildIntegerFloat() {
         PivotTreeBuilder<String, Float> pivotTreeBuilder = new PivotTreeBuilder<>();
         List<PivotRow<String, Float>> rows = getRowsFloat();
@@ -172,6 +183,16 @@ class PivotTreeBuilderTest {
                 new PivotRow<>(thirdRow, 3),
                 new PivotRow<>(fourthRow, 4),
                 new PivotRow<>(fifthRow, 5)
+        );
+    }
+
+    private List<PivotRow<String, Integer>> getUnorderedRowsInteger() {
+        return Arrays.asList(
+                new PivotRow<>(Arrays.asList("Node D","Node C","Node J","Node I"), 1),
+                new PivotRow<>(Arrays.asList("Node E","Node C","Node J","Node I"), 2),
+                new PivotRow<>(Arrays.asList("Node H","Node G","Node B","Node A"), 3),
+                new PivotRow<>(Arrays.asList("Node Y","Node X","Node B","Node A"), 4),
+                new PivotRow<>(Arrays.asList("Node H","Node X","Node B","Node A"), 5)
         );
     }
 
